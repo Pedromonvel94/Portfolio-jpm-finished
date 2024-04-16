@@ -56,7 +56,7 @@
     }
 
     .technologies{
-        @apply flex flex-col justify-center items-center bg-[#82828266] border-2 border-solid w-full h-[407px] rounded-[20px] shadow-3xl;
+        @apply flex flex-col justify-center items-center bg-[#82828266] border-2 border-solid w-full h-[407px] rounded-[20px] shadow-3xl ssm:max-md:w-[75vw];
         transition: box-shadow 0.2s, transform 0.2s;
     }
 
@@ -65,7 +65,7 @@
     }
 
     .technologies-img{
-        @apply w-[60px] h-[60px] object-contain
+        @apply w-[60px] h-[60px] object-contain ssm:max-md:w-[85px] ssm:max-md:h-[85px]
     }
 
     .tech-list {
