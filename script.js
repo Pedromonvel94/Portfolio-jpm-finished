@@ -17,56 +17,65 @@ close.addEventListener("click", () => {
     open.classList.remove("ssm:max-lg:opacity-0");
 })
 
-let ventanaGrande = window.innerWidth > 1024;
-
 function activarEfecto3D() {
     const cardsTech = document.querySelectorAll('.technologies');
 
     cardsTech.forEach(cardTech => {
-        const { top, left, height, width } = cardTech.getBoundingClientRect();
+        const height = cardTech.clientHeight;
+        const width = cardTech.clientWidth;
 
-        cardTech.addEventListener('mousemove', (evt) => {
-            const { clientX, clientY } = evt;
-            const offsetX = clientX - left;
-            const offsetY = clientY - top;
+        function mouseMoveHandler(evt) {
+            const {layerX, layerY} = evt
 
-            const yRotation = ((offsetX - width / 2) / width) * 5;
-            const xRotation = ((offsetY - height / 2) / height) * 5;
+            const yRotation = (
+                (layerX - width / 2) / width
+            ) * 5
 
-            const transformString = `
-                perspective(500px)
-                scale(1.008)
-                rotateX(${xRotation}deg)
-                rotateY(${yRotation}deg)
-            `;
+            const xRotation = (
+                (layerY - height / 2) / height
+            ) * 5
 
-            cardTech.style.transform = transformString;
-        });
+            const string = `
+            perspective(500px)
+            scale(1.008)
+            rotateX(${xRotation}deg)
+            rotateY(${yRotation}deg)`
 
-        cardTech.addEventListener('mouseout', () => {
+            cardTech.style.transform = string
+        }
+
+        function mouseOutHandler() {
             cardTech.style.transform = `
-                perspective(500px)
-                scale(1)
-                rotateX(0)
-                rotateY(0)
-            `;
-        });
+            perspective(500px)
+            scale(1)
+            rotateX(0)
+            rotateY(0)`
+        }
+
+        cardTech.addEventListener('mousemove', mouseMoveHandler);
+        cardTech.addEventListener('mouseout', mouseOutHandler);
     });
 }
 
-function ajustarEfecto3DSegunTamañoVentana() {
-    if (window.innerWidth > 1024) {
-        ventanaGrande = true;
-        activarEfecto3D();
-    } else {
-        ventanaGrande = false;
-    }
+function desactivarEfecto3D() {
+    const cardsTech = document.querySelectorAll('.technologies');
+    cardsTech.forEach(cardTech => {
+        cardTech.style.transform = 'none';
+        cardTech.removeEventListener('mousemove', mouseMoveHandler);
+        cardTech.removeEventListener('mouseout', mouseOutHandler);
+    });
 }
 
 window.addEventListener('load', () => {
-    ajustarEfecto3DSegunTamañoVentana();
+    if (window.innerWidth > 1024) {
+        activarEfecto3D();
+    }
 });
 
 window.addEventListener('resize', () => {
-    ajustarEfecto3DSegunTamañoVentana();
+    if (window.innerWidth > 1024) {
+        activarEfecto3D();
+    } else {
+        desactivarEfecto3D();
+    }
 });
